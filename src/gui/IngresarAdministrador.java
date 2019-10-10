@@ -8,11 +8,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.sql.SQLException;
 
 import javax.swing.JButton;
 import javax.swing.JPasswordField;
 
+import conexionBD.Conexion;
 import gui.elements.PasswordField;
+import gui.vistas.VistaAdministrador;
 
 
 public class IngresarAdministrador extends IngresarUsuario {
@@ -37,25 +40,33 @@ public class IngresarAdministrador extends IngresarUsuario {
 		btnIngresar = new JButton();
 		btnIngresar.setText("Ingresar");
 		btnIngresar.setBounds(12, 48, 240, 22);
-		btnIngresar.addActionListener(new ActionListener() {
+		btnIngresar.addActionListener(e -> {
+			/*
+			 * La idea sería acá crear un objeto que se encargue de conectarse a la base de datos y ahí
+			 * quede administrado todo el tema de la base de datos.
+			 * Inclusive podría llamarse Administrado, aunque quizás mejor debería tener un método que se llame
+			 * conectar administrador. Quizás ese objeto se podría crear en la 'Ventana' y pasarse acá.
+			 *
+			 * También podríamos cambiar el nombre de esta clase a "IngresarAdministrador" o algo así.
+			 * Y luego la clase de lo que ve el admin sería "VistaAdministrador"
+			 * También podríamos cambiar el nombre de 'Ventana' a 'VistaIngresar'
+			 * Además cambiar 'TipoUsuario' a 'IngresarUsuario'
+			 */
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				/*
-				 * La idea sería acá crear un objeto que se encargue de conectarse a la base de datos y ahí
-				 * quede administrado todo el tema de la base de datos.
-				 * Inclusive podría llamarse Administrado, aunque quizás mejor debería tener un método que se llame
-				 * conectar administrador. Quizás ese objeto se podría crear en la 'Ventana' y pasarse acá.
-				 * 
-				 * También podríamos cambiar el nombre de esta clase a "IngresarAdministrador" o algo así.
-				 * Y luego la clase de lo que ve el admin sería "VistaAdministrador"
-				 * También podríamos cambiar el nombre de 'Ventana' a 'VistaIngresar'
-				 * Además cambiar 'TipoUsuario' a 'IngresarUsuario'
-				 */
+			Conexion conn;
+			try {
+				String pw = new String(password.getPassword());
+				System.out.println("Password: " + pw);
+				conn = new Conexion("admin", pw);
+				GestorDeVistas.agregarVista(new VistaAdministrador(conn));
+			} catch (SQLException er) {
+				er.printStackTrace(); //esto hay que cambiarlo por un cuadro de dialogo
+				//if codigo == password incorrecta
+				//entonces show dialog 'password incorrecta'
+				//sino mostrar codigo y lo que dice la bd.
 			}
-			
 		});
-		
+
 		panel.add(password);
 		panel.add(btnIngresar);
 	}

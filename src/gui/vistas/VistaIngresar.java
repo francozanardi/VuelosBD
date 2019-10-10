@@ -19,43 +19,41 @@ import gui.IngresarAdministrador;
 import gui.IngresarEmpleado;
 import gui.IngresarUsuario;
 
-public class VistaIngresar {
+public class VistaIngresar extends Vista {
 
-	private JFrame frame;
 	private Panel panelUsuario;
 
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					VistaIngresar window = new VistaIngresar();
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+//	public static void main(String[] args) {
+//		EventQueue.invokeLater(new Runnable() {
+//			public void run() {
+//				try {
+//					VistaIngresar window = new VistaIngresar();
+//					window.frame.setVisible(true);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		});
+//	}
 
 	/**
 	 * Create the application.
 	 */
 	public VistaIngresar() {
 		initialize();
+		frame.setVisible(true);
 	}
 
 	/**
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		frame = new JFrame();
 		frame.getContentPane().setFont(new Font("Tahoma", Font.PLAIN, 16));
 		frame.setBounds(100, 100, 280, 115);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(null);
+		frame.setLayout(null);
 			
 		
 		JComboBox<IngresarUsuario> cBox_tipoUsuario = new JComboBox<>();
@@ -63,27 +61,23 @@ public class VistaIngresar {
 		
 		panelUsuario = new Panel();
 		panelUsuario.setBounds(0, 49, 262, 15);
-		frame.getContentPane().add(panelUsuario);
+		frame.add(panelUsuario);
 		panelUsuario.setLayout(null);
 		
 		
 		cBox_tipoUsuario.addItem(new IngresarAdministrador(panelUsuario));
 		cBox_tipoUsuario.addItem(new IngresarEmpleado(panelUsuario));
 		cBox_tipoUsuario.setSelectedIndex(0);
-		cBox_tipoUsuario.getModel().setSelectedItem("Seleccion el tipo de usuario...");;
+		cBox_tipoUsuario.getModel().setSelectedItem("Selecciona el tipo de usuario...");;
 		
-		cBox_tipoUsuario.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				int heigthOld = panelUsuario.getSize().height;
-				panelUsuario.removeAll();
-				panelUsuario.repaint();
-				cBox_tipoUsuario.getItemAt(cBox_tipoUsuario.getSelectedIndex()).crearGUI();
-				frame.setSize(Math.max(frame.getSize().width,panelUsuario.getSize().width), frame.getSize().height-heigthOld+panelUsuario.getSize().height);
-			} 
-			
+		cBox_tipoUsuario.addActionListener(e -> {
+			int heigthOld = panelUsuario.getSize().height;
+			panelUsuario.removeAll();
+			panelUsuario.repaint();
+			cBox_tipoUsuario.getItemAt(cBox_tipoUsuario.getSelectedIndex()).crearGUI();
+			frame.setSize(Math.max(frame.getSize().width,panelUsuario.getSize().width), frame.getSize().height-heigthOld+panelUsuario.getSize().height);
 		});
-		frame.getContentPane().add(cBox_tipoUsuario);
+
+		frame.add(cBox_tipoUsuario);
 	}
 }

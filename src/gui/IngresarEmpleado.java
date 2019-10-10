@@ -40,13 +40,8 @@ public class IngresarEmpleado extends IngresarUsuario {
 		btnIngresar = new JButton();
 		btnIngresar.setText("Ingresar");
 		btnIngresar.setBounds(12, 83, 240, 22);
-		btnIngresar.addActionListener(new ActionListener() {
+		btnIngresar.addActionListener(e -> {
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				
-			}
-			
 		});
 		
 		panel.add(txtLegajo);

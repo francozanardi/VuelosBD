@@ -17,33 +17,33 @@ import java.text.ParseException;
 
 import javax.swing.JFormattedTextField;
 
-public class VistaEmpleado {
-
-	private JFrame frame;
+public class VistaEmpleado extends Vista {
+	
 	private JTextField txtOrigen;
 	private JTextField txtDestino;
 
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					VistaEmpleado window = new VistaEmpleado();
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+//	public static void main(String[] args) {
+//		EventQueue.invokeLater(new Runnable() {
+//			public void run() {
+//				try {
+//					VistaEmpleado window = new VistaEmpleado();
+//					window.frame.setVisible(true);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		});
+//	}
 
 	/**
 	 * Create the application.
 	 */
 	public VistaEmpleado() {
 		initialize();
+		frame.setVisible(true);
 	}
 
 	/**
@@ -52,8 +52,8 @@ public class VistaEmpleado {
 	private void initialize() {
 		frame = new JFrame();
 		frame.setBounds(100, 100, 323, 275);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(null);
+		frame.setLayout(null);
+
 		
 		txtOrigen = new TextField("Ciudad origen", new Font("Tahoma", Font.PLAIN, 16));
 		txtOrigen.setBounds(12, 23, 266, 22);
@@ -61,8 +61,8 @@ public class VistaEmpleado {
 		txtDestino = new TextField("Ciudad destino", new Font("Tahoma", Font.PLAIN, 16));
 		txtDestino.setBounds(12, 58, 266, 22);
 		
-		frame.getContentPane().add(txtOrigen);
-		frame.getContentPane().add(txtDestino);		
+		frame.add(txtOrigen);
+		frame.add(txtDestino);
 		
 		JFormattedTextField fechaIda, fechaVuelta;
 		fechaIda = new DateText("Fecha de ida", new Font("Tahoma", Font.PLAIN, 16));
@@ -72,23 +72,16 @@ public class VistaEmpleado {
 		fechaVuelta.setBounds(151, 97, 127, 22);
 		fechaVuelta.setEnabled(false);
 		
-		frame.getContentPane().add(fechaIda);
-		frame.getContentPane().add(fechaVuelta);
+		frame.add(fechaIda);
+		frame.add(fechaVuelta);
 		
 		
 		JCheckBox chckbxIdaYVuelta = new JCheckBox("Ida y vuelta");
 		chckbxIdaYVuelta.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		chckbxIdaYVuelta.setBounds(12, 128, 113, 25);
-		chckbxIdaYVuelta.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				fechaVuelta.setEnabled(chckbxIdaYVuelta.isSelected());
-			}
-			
-		});
+		chckbxIdaYVuelta.addActionListener(e -> fechaVuelta.setEnabled(chckbxIdaYVuelta.isSelected()));
 		
-		frame.getContentPane().add(chckbxIdaYVuelta);
+		frame.add(chckbxIdaYVuelta);
 
 	}
 }
