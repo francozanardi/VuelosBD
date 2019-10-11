@@ -1,27 +1,15 @@
 package gui.vistas;
-import java.awt.EventQueue;
+import java.awt.*;
 
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import java.awt.Font;
-import javax.swing.JComboBox;
-import java.awt.Panel;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-
-import javax.swing.JPasswordField;
-import java.awt.Color;
-import javax.swing.JTextField;
+import javax.swing.*;
 
 import gui.IngresarAdministrador;
-import gui.IngresarEmpleado;
+import gui.IngresarEmpleadoBuscar;
 import gui.IngresarUsuario;
 
 public class VistaIngresar extends Vista {
-
-	private Panel panelUsuario;
+	private JPanel panelSeleccion, panelUsuario;
+	private JComboBox<IngresarUsuario> cBox_tipoUsuario;
 
 	/**
 	 * Launch the application.
@@ -51,33 +39,49 @@ public class VistaIngresar extends Vista {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		frame.getContentPane().setFont(new Font("Tahoma", Font.PLAIN, 16));
-		frame.setBounds(100, 100, 280, 115);
-		frame.setLayout(null);
-			
+		frame.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		
-		JComboBox<IngresarUsuario> cBox_tipoUsuario = new JComboBox<>();
-		cBox_tipoUsuario.setBounds(12, 20, 240, 22);
-		
-		panelUsuario = new Panel();
-		panelUsuario.setBounds(0, 49, 262, 15);
-		frame.add(panelUsuario);
-		panelUsuario.setLayout(null);
-		
-		
+//		frame.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 15));
+		frame.setLayout(new BorderLayout(0, 0));
+//		frame.getContentPane().setLayout(new BorderLayout(0, 15));
+
+
+		panelUsuario = new JPanel();
+
+		String defaultString = "Selecciona el tipo de usuario...";
+		cBox_tipoUsuario = new JComboBox<>();
 		cBox_tipoUsuario.addItem(new IngresarAdministrador(panelUsuario));
-		cBox_tipoUsuario.addItem(new IngresarEmpleado(panelUsuario));
+		cBox_tipoUsuario.addItem(new IngresarEmpleadoBuscar(panelUsuario));
 		cBox_tipoUsuario.setSelectedIndex(0);
-		cBox_tipoUsuario.getModel().setSelectedItem("Selecciona el tipo de usuario...");;
+		cBox_tipoUsuario.getModel().setSelectedItem(defaultString);
+		cBox_tipoUsuario.setPrototypeDisplayValue(new IngresarUsuario(defaultString) {
+			@Override
+			public void crearGUI() {
 		
+			}
+		});
+
+		panelUsuario.setBorder(BorderFactory.createEmptyBorder(5, 10, 15,10));
+
 		cBox_tipoUsuario.addActionListener(e -> {
-			int heigthOld = panelUsuario.getSize().height;
+			int heigthOld = panelUsuario.getPreferredSize().height;
 			panelUsuario.removeAll();
 			panelUsuario.repaint();
 			cBox_tipoUsuario.getItemAt(cBox_tipoUsuario.getSelectedIndex()).crearGUI();
-			frame.setSize(Math.max(frame.getSize().width,panelUsuario.getSize().width), frame.getSize().height-heigthOld+panelUsuario.getSize().height);
+
+			frame.setSize(frame.getWidth(), frame.getHeight()+panelUsuario.getPreferredSize().height-heigthOld);
 		});
 
-		frame.add(cBox_tipoUsuario);
+		panelSeleccion = new JPanel();
+		panelSeleccion.setLayout(new BorderLayout());
+		panelSeleccion.setBorder(BorderFactory.createEmptyBorder(15, 10, 5, 10));
+		panelSeleccion.add(cBox_tipoUsuario, BorderLayout.CENTER);
+		
+		frame.add(panelSeleccion, BorderLayout.NORTH);
+		frame.add(panelUsuario, BorderLayout.SOUTH);
+		
+		frame.setSize(cBox_tipoUsuario.getPreferredSize().width+100, cBox_tipoUsuario.getPreferredSize().height+100);
+		frame.setResizable(false);
+		
 	}
 }

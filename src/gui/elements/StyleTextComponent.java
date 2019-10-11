@@ -8,7 +8,7 @@ import javax.swing.text.JTextComponent;
 
 
 class StyleTextComponent<E extends JTextComponent & FocuseableElement> {
-	
+
 	private StyleTextComponent() {
 		
 	}
@@ -18,33 +18,42 @@ class StyleTextComponent<E extends JTextComponent & FocuseableElement> {
 		focusOff(fe, text, font);
 		
 		fe.addFocusListener(new FocusListener() {
+			private boolean estaEscrito;
+
+			{
+				estaEscrito = false;
+			}
 
 			@Override
 			public void focusGained(FocusEvent arg0) {
-				focusOn(fe, font);
+				if(!estaEscrito)
+					focusOn(fe, font);
 			}
 
 			@Override
 			public void focusLost(FocusEvent arg0) {
 				if(fe.isEmpty()) {
 					focusOff(fe, text, font);
+					estaEscrito = false;
+				} else {
+					estaEscrito = true;
 				}
 			}
 		});
 	}
 	
-	private static void focusOff(FocuseableElement tc, String text, Font font) {
-		tc.focusOff();
-		tc.setForeground(Color.LIGHT_GRAY);
-		tc.setFont(font.deriveFont(Font.ITALIC));
-		tc.setText(text);
+	private static void focusOff(FocuseableElement fe, String text, Font font) {
+		fe.focusOff();
+		fe.setForeground(Color.LIGHT_GRAY);
+		fe.setFont(font.deriveFont(Font.ITALIC));
+		fe.setText(text);
 	}
 	
-	private static void focusOn(FocuseableElement tc, Font font) {
-		tc.focusOn();
-		tc.setForeground(Color.BLACK);
-		tc.setFont(font);
-		tc.setText("");
+	private static void focusOn(FocuseableElement fe, Font font) {
+		fe.focusOn();
+		fe.setForeground(Color.BLACK);
+		fe.setFont(font);
+		fe.setText("");
 	}
 	
 	

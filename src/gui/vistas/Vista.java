@@ -18,7 +18,7 @@ public abstract class Vista {
 			@Override
 			public void windowClosing(WindowEvent arg0) {
 				System.out.println("cerrando vista");
-				GestorDeVistas.retroceder();			
+				GestorDeVistas.retroceder();
 			}
 			
 		});
@@ -38,8 +38,5 @@ public abstract class Vista {
 	public void abrirVista() {
 		frame.setVisible(true);
 	}
-	
-	protected void retrocederAlCerrarVista() {
 
-	}
 }

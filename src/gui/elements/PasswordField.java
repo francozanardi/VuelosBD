@@ -30,5 +30,4 @@ public class PasswordField extends JPasswordField implements FocuseableElement {
 	public boolean isEmpty() {
 		return getPassword().length == 0;
 	}
-
 }

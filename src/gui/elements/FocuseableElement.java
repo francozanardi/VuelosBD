@@ -5,16 +5,17 @@ import java.awt.Font;
 import java.awt.event.FocusListener;
 
 interface FocuseableElement {
-	public boolean isEmpty();
-	public void setText(String s);
-	public void setFont(Font f);
-	public void setForeground(Color c);
-	public void addFocusListener(FocusListener fl);
+	boolean isEmpty();
+	void setText(String s);
+	void setFont(Font f);
+	void setForeground(Color c);
+	void addFocusListener(FocusListener fl);
+
 	
-	public default void focusOn() {
+	default void focusOn() {
 		
 	}
-	public default void focusOff() {
+	default void focusOff() {
 		
 	}
 }

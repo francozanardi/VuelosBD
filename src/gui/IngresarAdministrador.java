@@ -1,19 +1,13 @@
 package gui;
 
-import java.awt.Button;
-import java.awt.Color;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Panel;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.sql.SQLException;
 
-import javax.swing.JButton;
-import javax.swing.JPasswordField;
+import javax.swing.*;
 
-import conexionBD.Conexion;
+import conexionBD.ConexionVuelos;
 import gui.elements.PasswordField;
 import gui.vistas.VistaAdministrador;
 
@@ -21,10 +15,10 @@ import gui.vistas.VistaAdministrador;
 public class IngresarAdministrador extends IngresarUsuario {
 	
 	private JPasswordField password;
-	private Panel panel;
+	private JPanel panel;
 	private JButton btnIngresar;
 
-	public IngresarAdministrador(Panel p) {
+	public IngresarAdministrador(JPanel p) {
 		super("Administrador");
 		this.panel = p;
 	}
@@ -32,14 +26,13 @@ public class IngresarAdministrador extends IngresarUsuario {
 	@Override
 	public void crearGUI() {
 		panel.setSize(264, 78);
+		panel.setLayout(new BorderLayout(0, 15));
 		
 		password = new PasswordField("Ingrese su contrase\u00F1a", new Font("Tahoma", Font.PLAIN, 16));
-		password.setBounds(12, 13, 240, 22);
 		
 		
 		btnIngresar = new JButton();
 		btnIngresar.setText("Ingresar");
-		btnIngresar.setBounds(12, 48, 240, 22);
 		btnIngresar.addActionListener(e -> {
 			/*
 			 * La idea sería acá crear un objeto que se encargue de conectarse a la base de datos y ahí
@@ -53,11 +46,11 @@ public class IngresarAdministrador extends IngresarUsuario {
 			 * Además cambiar 'TipoUsuario' a 'IngresarUsuario'
 			 */
 
-			Conexion conn;
+			ConexionVuelos conn;
 			try {
 				String pw = new String(password.getPassword());
 				System.out.println("Password: " + pw);
-				conn = new Conexion("admin", pw);
+				conn = new ConexionVuelos("admin", pw);
 				GestorDeVistas.agregarVista(new VistaAdministrador(conn));
 			} catch (SQLException er) {
 				er.printStackTrace(); //esto hay que cambiarlo por un cuadro de dialogo
@@ -67,8 +60,8 @@ public class IngresarAdministrador extends IngresarUsuario {
 			}
 		});
 
-		panel.add(password);
-		panel.add(btnIngresar);
+		panel.add(password, BorderLayout.NORTH);
+		panel.add(btnIngresar, BorderLayout.CENTER);
 	}
 	
 	
