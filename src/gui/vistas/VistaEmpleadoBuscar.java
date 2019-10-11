@@ -7,6 +7,7 @@ import javax.swing.border.Border;
 import javax.swing.text.MaskFormatter;
 
 import conexionBD.ConexionVuelos;
+import fechas.Fechas;
 import gui.GestorDeVistas;
 import gui.elements.DateText;
 import gui.elements.TextField;
@@ -14,9 +15,10 @@ import gui.elements.TextField;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.text.ParseException;
 
-public class VistaEmpleado extends Vista {
+public class VistaEmpleadoBuscar extends Vista {
 
 	private ConexionVuelos conn;
 	private JTextField txtOrigen;
@@ -25,39 +27,29 @@ public class VistaEmpleado extends Vista {
 	private JCheckBox chckbxIdaYVuelta;
 	private JButton buscar;
 
-	/**
-	 * Launch the application.
-	 */
-//	public static void main(String[] args) {
-//		EventQueue.invokeLater(new Runnable() {
-//			public void run() {
-//				try {
-//					VistaEmpleado window = new VistaEmpleado();
-//					window.frame.setVisible(true);
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		});
-//	}
 
-	/**
-	 * Create the application.
-	 */
-	public VistaEmpleado(ConexionVuelos conn) {
+	public VistaEmpleadoBuscar(ConexionVuelos conn) {
 		this.conn = conn;
 		initialize();
 		frame.setVisible(true);
 	}
 
-	/**
-	 * Initialize the contents of the frame.
-	 */
+	@Override
+	public void finalizarVista() {
+		super.finalizarVista();
+		try {
+			conn.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+
 	private void initialize() {
 		frame.setBounds(100, 100, 320, 240);
 		frame.setLayout(new BorderLayout());
-//		frame.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 5));
 		frame.setResizable(false);
+		frame.setTitle("Empleado | Búsqueda");
 
 		panelCiudades = new JPanel();
 		panelCiudades.setLayout(new BorderLayout(0, 0));
@@ -102,11 +94,28 @@ public class VistaEmpleado extends Vista {
 		buscar = new JButton();
 		buscar.setText("Buscar");
 		buscar.addActionListener((e) -> {
-			if(chckbxIdaYVuelta.isSelected()){
-				GestorDeVistas.agregarVista(new VistaEmpleadoTablas(conn, txtOrigen.getText(), txtDestino.getText(), fechaIda.getText(), fechaVuelta.getText()));
+
+			if(Fechas.validar(fechaIda.getText())){
+				if(chckbxIdaYVuelta.isSelected()){
+					if(Fechas.validar(fechaVuelta.getText())){
+						GestorDeVistas.agregarVista(new VistaEmpleadoTablas(conn, txtOrigen.getText(), txtDestino.getText(), fechaIda.getText(), fechaVuelta.getText()));
+					} else {
+						JOptionPane.showMessageDialog(frame,
+								"La fecha de vuelta es inválida.",
+								"Fecha inválida",
+								JOptionPane.ERROR_MESSAGE);
+					}
+				} else {
+					GestorDeVistas.agregarVista(new VistaEmpleadoTablas(conn, txtOrigen.getText(), txtDestino.getText(), fechaIda.getText()));
+				}
 			} else {
-				GestorDeVistas.agregarVista(new VistaEmpleadoTablas(conn, txtOrigen.getText(), txtDestino.getText(), fechaIda.getText()));
+				JOptionPane.showMessageDialog(frame,
+						"La fecha de ida es inválida.",
+						"Fecha inválida",
+						JOptionPane.ERROR_MESSAGE);
 			}
+
+
 		});
 
 		panelBotones = new JPanel();

@@ -4,7 +4,7 @@ import java.awt.Font;
 import java.text.ParseException;
 
 import javax.swing.JFormattedTextField;
-import javax.swing.text.MaskFormatter;;
+import javax.swing.text.MaskFormatter;
 
 public class DateText extends JFormattedTextField implements FocuseableElement {
 	

@@ -1,6 +1,5 @@
 package gui;
 
-import java.util.Queue;
 import java.util.Stack;
 
 import gui.vistas.*;
@@ -21,6 +20,10 @@ public class GestorDeVistas {
 		if(!vistas.isEmpty())
 			vistas.peek().minimizarVista();
 		vistas.push(v);
+
+		if(vistas.size() > 1){
+			v.activateBackButton();
+		}
 	}
 	
 	public static void retroceder() {
@@ -29,5 +32,11 @@ public class GestorDeVistas {
 		
 		if(!vistas.isEmpty())
 			vistas.peek().abrirVista();
+	}
+
+	public static void finalizar(){
+		while(!vistas.isEmpty()){
+			vistas.pop().finalizarVista();
+		}
 	}
 }

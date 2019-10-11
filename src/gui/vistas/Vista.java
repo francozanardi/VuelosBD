@@ -3,12 +3,15 @@ package gui.vistas;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-import javax.swing.JFrame;
+import javax.swing.*;
 
 import gui.GestorDeVistas;
 
 public abstract class Vista {
 	protected JFrame frame;
+	protected JMenuBar menuBar;
+	protected JMenu menuOpciones;
+	protected JMenuItem itemAtras;
 	
 	public Vista() {
 		frame = new JFrame();
@@ -17,13 +20,26 @@ public abstract class Vista {
 
 			@Override
 			public void windowClosing(WindowEvent arg0) {
-				System.out.println("cerrando vista");
-				GestorDeVistas.retroceder();
+				GestorDeVistas.finalizar();
 			}
 			
 		});
-		
-		// en vez de esto agregar un botón de volver a cada vista, o algo así.
+
+		menuBar = new JMenuBar();
+		menuOpciones = new JMenu("Opciones");
+		itemAtras = new JMenuItem("Atrás");
+		itemAtras.addActionListener(e -> GestorDeVistas.retroceder());
+
+		menuOpciones.add(itemAtras);
+		menuBar.add(menuOpciones);
+	}
+
+	public void activateBackButton(){
+		frame.setJMenuBar(menuBar);
+	}
+
+	public void desactivateBackButton(){
+		frame.setJMenuBar(null);
 	}
 	
 	public void minimizarVista() {

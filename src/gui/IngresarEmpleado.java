@@ -1,7 +1,6 @@
 package gui;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -12,15 +11,15 @@ import javax.swing.*;
 import conexionBD.ConexionVuelos;
 import gui.elements.PasswordField;
 import gui.elements.TextField;
-import gui.vistas.VistaEmpleado;
+import gui.vistas.VistaEmpleadoBuscar;
 
-public class IngresarEmpleadoBuscar extends IngresarUsuario {
+public class IngresarEmpleado extends IngresarUsuario {
 	private JPanel panel;
 	private JTextField txtLegajo;
 	private JPasswordField password;
 	private JButton btnIngresar;
 
-	public IngresarEmpleadoBuscar(JPanel p) {
+	public IngresarEmpleado(JPanel p) {
 		super("Empleado");
 		panel = p;
 	}
@@ -44,12 +43,18 @@ public class IngresarEmpleadoBuscar extends IngresarUsuario {
 				st = conn.getConnection().createStatement();
 				rs = st.executeQuery("Select * from empleados where legajo = '" + txtLegajo.getText() + "' and password = md5('" + new String(password.getPassword()) + "');");
 				if(rs.next()){
-					GestorDeVistas.agregarVista(new VistaEmpleado(conn));
+					GestorDeVistas.agregarVista(new VistaEmpleadoBuscar(conn));
 				} else {
-					System.out.println("Datos inválidos!");
+					JOptionPane.showMessageDialog(panel,
+							"Los datos proporcionados son inválidos, por favor vuelva a ingresarlos.",
+							"Datos inválidos",
+							JOptionPane.ERROR_MESSAGE);
 				}
-			} catch (SQLException e1) {
-				e1.printStackTrace();
+			} catch (SQLException er) {
+				JOptionPane.showMessageDialog(panel,
+						"Se produjo un error al intentar conectarse a la base de datos.\n" + er.getMessage(),
+						"Error" + er.getErrorCode(),
+						JOptionPane.ERROR_MESSAGE);
 			}
 
 		});

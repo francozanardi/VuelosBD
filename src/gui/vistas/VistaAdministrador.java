@@ -24,25 +24,6 @@ public class VistaAdministrador extends Vista {
 	private ConexionVuelos conn;
 	private JPanel panelQuery;
 
-	/**
-	 * Launch the application.
-	 */
-/*	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					VistaAdministrador window = new VistaAdministrador(null);
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}*/
-
-	/**
-	 * Create the application.
-	 */
 	public VistaAdministrador(ConexionVuelos conexion) {
 		this.conn = conexion;
 		initialize();
@@ -60,12 +41,10 @@ public class VistaAdministrador extends Vista {
 	}
 
 	private void initialize() {
-//		frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
 		frame.setBounds(100, 100, 772, 371);
-//		frame.setLayout(new FlowLayout(FlowLayout.CENTER, 15, 15));
 		frame.setLayout(new BorderLayout(0, 0));
-//		frame.setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.X_AXIS));
-//
+		frame.setTitle("Administrador");
+
 		panelQuery = new JPanel();
 		panelQuery.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 		panelQuery.setLayout(new BorderLayout(0, 15));
@@ -89,9 +68,6 @@ public class VistaAdministrador extends Vista {
 		scrollPaneTree.setPreferredSize(new Dimension(200, 400));
 		scrollPaneTree.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-/*		treeDB = new JTree();
-		treeDB.setRootVisible(false);
-		scrollPaneTree.setViewportView(treeDB);*/
 		crearTreeDB();
 
 
@@ -107,41 +83,49 @@ public class VistaAdministrador extends Vista {
 			treeDB.setModel(new DefaultTreeModel(
 				new DefaultMutableTreeNode("DB") {
 					{ //utilizamos un inicializador anónimo.
-						if(conn.getConnection().isValid(10)) {
+						if(conn.isConnectionValid()) {
 							Statement stmtAtribs, stmtTables;
-							
+
 							stmtTables = conn.getConnection().createStatement();
 							stmtAtribs = conn.getConnection().createStatement();
-							
+
 							ResultSet rsAtribs, rsTables = stmtTables.executeQuery("SHOW TABLES");
-							
+
 							String table;
 							DefaultMutableTreeNode tableNode;
-							
+
 							while(rsTables.next()) {
 								table = rsTables.getString(1);
 								rsAtribs = stmtAtribs.executeQuery("DESCRIBE " + table);
-								
+
 								tableNode = new DefaultMutableTreeNode(table);
 								while(rsAtribs.next()) {
 									tableNode.add(new DefaultMutableTreeNode(rsAtribs.getString(1)));
 								}
-								
+
 								add(tableNode);
 								rsAtribs.close();
-								
+
 							}
-							
+
 							rsTables.close();
 							stmtAtribs.close();
 							stmtTables.close();
+						} else {
+							JOptionPane.showMessageDialog(frame,
+									"Se perdió la conexión con la base de datos.",
+									"Error",
+									JOptionPane.ERROR_MESSAGE);
 						}
 					}
 				}
 			));
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+			JOptionPane.showMessageDialog(frame,
+					"Se produjo el error " + e.getErrorCode() + " en la bases de datos.",
+					"Error",
+					JOptionPane.ERROR_MESSAGE);
 		}
 		
 		scrollPaneTree.setViewportView(treeDB);
@@ -149,7 +133,7 @@ public class VistaAdministrador extends Vista {
 	
 	private void ejecutarSqlCode() {
 		try {
-			if(conn.getConnection().isValid(10)){
+			if(conn.isConnectionValid()){
 				if(conn.isSelect(txtrConsulta.getText().trim())){
 					conn.setSelectSql(txtrConsulta.getText().trim());
 
@@ -166,10 +150,17 @@ public class VistaAdministrador extends Vista {
 					SwingUtilities.updateComponentTreeUI(frame);
 				}
 
+			} else {
+				JOptionPane.showMessageDialog(frame,
+						"Se perdió la conexión con la base de datos.",
+						"Error",
+						JOptionPane.ERROR_MESSAGE);
 			}
 		} catch (SQLException e) {
-			//acá poner diálogo con lo que me dice el servidor
-			e.printStackTrace();
+			JOptionPane.showMessageDialog(frame,
+					e.getMessage(),
+					"Error " + e.getErrorCode(),
+					JOptionPane.ERROR_MESSAGE);
 		}
 	}
 }
