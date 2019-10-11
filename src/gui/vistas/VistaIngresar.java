@@ -10,8 +10,10 @@ import gui.IngresarUsuario;
 public class VistaIngresar extends Vista {
 	private JPanel panelSeleccion, panelUsuario;
 	private JComboBox<IngresarUsuario> cBox_tipoUsuario;
+	private int lastIndexSelected;
 
 	public VistaIngresar() {
+		lastIndexSelected = -1;
 		initialize();
 		frame.setVisible(true);
 	}
@@ -33,12 +35,17 @@ public class VistaIngresar extends Vista {
 		panelUsuario.setBorder(BorderFactory.createEmptyBorder(5, 10, 15,10));
 
 		cBox_tipoUsuario.addActionListener(e -> {
-			int heigthOld = panelUsuario.getPreferredSize().height;
-			panelUsuario.removeAll();
-			panelUsuario.repaint();
-			cBox_tipoUsuario.getItemAt(cBox_tipoUsuario.getSelectedIndex()).crearGUI();
+			int indexSelected = cBox_tipoUsuario.getSelectedIndex();
+			if(indexSelected != lastIndexSelected) {
+				lastIndexSelected = indexSelected;
+				int heigthOld = panelUsuario.getPreferredSize().height;
+				panelUsuario.removeAll();
+				panelUsuario.repaint();
+				cBox_tipoUsuario.getItemAt(indexSelected).crearGUI();
 
-			frame.setSize(frame.getWidth(), frame.getHeight()+panelUsuario.getPreferredSize().height-heigthOld);
+				frame.setSize(frame.getWidth(), frame.getHeight()+panelUsuario.getPreferredSize().height-heigthOld);
+			}
+
 		});
 
 		panelSeleccion = new JPanel();

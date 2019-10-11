@@ -3,20 +3,12 @@ package gui.vistas;
 import java.awt.*;
 
 import javax.swing.*;
-import javax.swing.border.Border;
-import javax.swing.text.MaskFormatter;
-
 import conexionBD.ConexionVuelos;
 import fechas.Fechas;
 import gui.GestorDeVistas;
 import gui.elements.DateText;
 import gui.elements.TextField;
-
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.sql.Connection;
 import java.sql.SQLException;
-import java.text.ParseException;
 
 public class VistaEmpleadoBuscar extends Vista {
 
@@ -97,7 +89,7 @@ public class VistaEmpleadoBuscar extends Vista {
 
 			if(Fechas.validar(fechaIda.getText())){
 				if(chckbxIdaYVuelta.isSelected()){
-					if(Fechas.validar(fechaVuelta.getText())){
+					if(Fechas.validar(fechaVuelta.getText()) && Fechas.convertirStringADate(fechaIda.getText()).before(Fechas.convertirStringADate(fechaVuelta.getText()))){
 						GestorDeVistas.agregarVista(new VistaEmpleadoTablas(conn, txtOrigen.getText(), txtDestino.getText(), fechaIda.getText(), fechaVuelta.getText()));
 					} else {
 						JOptionPane.showMessageDialog(frame,

@@ -150,6 +150,7 @@ public class VistaEmpleadoTablas extends Vista {
                     }
                     tablaVueloSeleccionado = createTableSeleccion(vuelo, fecha);
                     tabbedPane.addTab("Vuelo seleccionado", tablaVueloSeleccionado);
+                    tabbedPane.setSelectedIndex(tabbedPane.indexOfComponent(tablaVueloSeleccionado));
 
                 } else {
                     JOptionPane.showMessageDialog(frame,
