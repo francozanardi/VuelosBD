@@ -31,4 +31,6 @@ public class ConexionVuelos extends DBTable {
 		return conn.isValid(15);
 	}
 
+
+
 }

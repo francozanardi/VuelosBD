@@ -4,10 +4,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import javax.swing.text.JTextComponent;
 
-
-class StyleTextComponent<E extends JTextComponent & FocuseableElement> {
+class StyleTextComponent {
 
 	private StyleTextComponent() {
 		
@@ -26,17 +24,17 @@ class StyleTextComponent<E extends JTextComponent & FocuseableElement> {
 
 			@Override
 			public void focusGained(FocusEvent arg0) {
-				if(!estaEscrito)
+				if(!estaEscrito) {
 					focusOn(fe, font);
+				}
 			}
 
 			@Override
 			public void focusLost(FocusEvent arg0) {
-				if(fe.isEmpty()) {
+				estaEscrito = !fe.isEmpty();
+
+				if(!estaEscrito) {
 					focusOff(fe, text, font);
-					estaEscrito = false;
-				} else {
-					estaEscrito = true;
 				}
 			}
 		});

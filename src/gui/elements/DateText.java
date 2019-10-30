@@ -11,13 +11,12 @@ public class DateText extends JFormattedTextField implements FocuseableElement {
 	public DateText(String text, Font font) {
 		super();
 		StyleTextComponent.addStyle(this, text, font);
-		
 	}
 
 	@Override
 	public void focusOn() {
 		try {
-			this.setFormatter(new MaskFormatter("##'/##'/####"));
+			super.setFormatter(new MaskFormatter("##'/##'/####"));
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
@@ -25,12 +24,18 @@ public class DateText extends JFormattedTextField implements FocuseableElement {
 
 	@Override
 	public void focusOff() {
-		this.setFormatter(null);
+		super.setFormatter(null);
 	}
 
 	@Override
 	public boolean isEmpty() {
-		return getText().equals("  /  /    ");
+		return getText().equals("  /  /    ") || getText().isEmpty();
 	}
-	
+
+	@Override
+	protected void setFormatter(AbstractFormatter format) {
+		if(format != null){
+			super.setFormatter(format);
+		}
+	}
 }

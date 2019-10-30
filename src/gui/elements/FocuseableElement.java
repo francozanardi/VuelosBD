@@ -15,6 +15,7 @@ interface FocuseableElement {
 	default void focusOn() {
 		
 	}
+	
 	default void focusOff() {
 		
 	}

@@ -43,7 +43,7 @@ public class IngresarEmpleado extends IngresarUsuario {
 				st = conn.getConnection().createStatement();
 				rs = st.executeQuery("Select * from empleados where legajo = '" + txtLegajo.getText() + "' and password = md5('" + new String(password.getPassword()) + "');");
 				if(rs.next()){
-					GestorDeVistas.agregarVista(new VistaEmpleadoBuscar(conn));
+					GestorDeVistas.agregarVista(new VistaEmpleadoBuscar(conn, txtLegajo.getText()));
 				} else {
 					JOptionPane.showMessageDialog(panel,
 							"Los datos proporcionados son inválidos, por favor vuelva a ingresarlos.",

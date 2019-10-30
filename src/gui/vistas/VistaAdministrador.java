@@ -50,13 +50,13 @@ public class VistaAdministrador extends Vista {
 		panelQuery.setLayout(new BorderLayout(0, 15));
 
 		scrollPaneTextArea = new JScrollPane();
-		scrollPaneTextArea.setBounds(189, 13, 553, 264);
+//		scrollPaneTextArea.setBounds(189, 13, 553, 264);
 		
 		txtrConsulta = new TextArea("Ingrese su consulta", new Font("Monospaced", Font.PLAIN, 16));
 		scrollPaneTextArea.setViewportView(txtrConsulta);
 
 		btnEjecutar = new JButton("Ejecutar");
-		btnEjecutar.setBounds(645, 290, 97, 25);
+//		btnEjecutar.setBounds(645, 290, 97, 25);
 		btnEjecutar.addActionListener(e -> ejecutarSqlCode());
 
 		panelQuery.add(scrollPaneTextArea, BorderLayout.CENTER);
@@ -64,7 +64,7 @@ public class VistaAdministrador extends Vista {
 		
 		
 		scrollPaneTree = new JScrollPane();
-		scrollPaneTree.setBounds(12, 13, 145, 264);
+//		scrollPaneTree.setBounds(12, 13, 145, 264);
 		scrollPaneTree.setPreferredSize(new Dimension(200, 400));
 		scrollPaneTree.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
