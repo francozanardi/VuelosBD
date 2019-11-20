@@ -360,7 +360,8 @@ DELIMITER !
 DROP PROCEDURE IF EXISTS getEstadoReserva !
 CREATE PROCEDURE getEstadoReserva(IN vuelo VARCHAR(30), IN fecha DATE, IN clase VARCHAR(40), OUT estado VARCHAR(30))
 	BEGIN
-		DECLARE asientosReservados, asientosBrinda INT UNSIGNED;
+		DECLARE asientosReservados, asientosBrinda, asientosTotales INT UNSIGNED;
+		DECLARE porcentajeAux DECIMAL(2,2) UNSIGNED;
 		
 		-- Evaluamos que efectivamente exista un vuelo con los datos recibidos y que brinde la clase recibida por parámetro. 
 		IF EXISTS (SELECT * FROM instancias_vuelo NATURAL JOIN salidas NATURAL JOIN brinda WHERE
@@ -372,6 +373,7 @@ CREATE PROCEDURE getEstadoReserva(IN vuelo VARCHAR(30), IN fecha DATE, IN clase 
 			SELECT cantidad INTO asientosReservados FROM asientos_reservados WHERE
 				asientos_reservados.vuelo = vuelo AND asientos_reservados.fecha = fecha AND asientos_reservados.clase = clase FOR UPDATE;
 			
+			SELECT porcentaje INTO porcentajeAux FROM clases WHERE clases.nombre = clase LOCK IN SHARE MODE;
 			
 			/*
 				Si asientosReservados es null se debe a que falta tal fila en asientos_reservados.
@@ -389,7 +391,13 @@ CREATE PROCEDURE getEstadoReserva(IN vuelo VARCHAR(30), IN fecha DATE, IN clase 
 			IF asientosBrinda > asientosReservados THEN
 				SET estado = "confirmada";
 			ELSE
-				SET estado = "en espera";
+				SET asientosTotales = TRUNCATE(asientosBrinda + asientosBrinda*porcentajeAux, 0);
+				
+				IF asientosReservados < asientosTotales THEN 
+					SET estado = "en espera";
+				ELSE
+					SELECT CONCAT('El vuelo ', vuelo, ' en la fecha ', fecha, ' no posee asientos disponibles para la clase ', clase, '.') AS descripcion, 'Error' AS resultado;
+				END IF;
 			END IF;
 		ELSE
 			SELECT CONCAT('El vuelo ', vuelo, ' en la fecha ', fecha, ' no existe o no brinda pasajes para la clase ', clase, '.') AS descripcion, 'Error' AS resultado;

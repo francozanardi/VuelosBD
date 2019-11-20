@@ -145,7 +145,7 @@ public class VistaEmpleadoTablas extends Vista {
         try {
             DBTable tb = new ConexionVuelos(conn);
             tb.setEditable(false);
-            tb.setSelectSql("SELECT vuelos_disponibles.vuelo as vuelo, vuelos_disponibles.fecha as fecha, clase, asientos_disp, precio_pasaje FROM vuelos_disponibles WHERE vuelo='" + vuelo + "' AND fecha='" + Fechas.convertirStringADateSQL(fecha) + "';");
+            tb.setSelectSql("SELECT vuelos_disponibles.vuelo as vuelo, vuelos_disponibles.fecha as fecha, clase, asientos_disp, precio_pasaje FROM vuelos_disponibles WHERE vuelo='" + vuelo + "' AND fecha='" + Fechas.convertirStringADateSQL(fecha) + "' AND asientos_disp > 0;");
             tb.refresh();
 
             tb.setMinimumSize(null);
@@ -324,7 +324,7 @@ public class VistaEmpleadoTablas extends Vista {
                                 }
 
                                 if(rs.next()){
-                                    if(rs.getString(2).equals("error")){
+                                    if(rs.getString(2).toLowerCase().equals("error")){
                                         JOptionPane.showMessageDialog(frame,
                                                 rs.getString(1),
                                                 "Error",
